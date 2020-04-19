@@ -1,24 +1,25 @@
 void setup() {
   size(1920, 1080);
   background(color(250, 250, 255));
-  frameRate(15);
+  frameRate(20);
 }
 
 float noiseController = 5;
 float COLOR_NOISE = 0.001;
-int NUM_LINES = 3;
+int NUM_LINES = 1;
 color BG_COLOR = color(250, 250, 255);
 
-int R = 100;
+int R = 200;
 byte rInc = 3;
-int G = 200;
+int G = 150;
 byte gInc = 1;
-int B = 255;
+int B = 150;
 byte bInc = 1;
 
 void draw() {
+  background(color(250, 250, 255));
   stroke(newColor());
-  strokeWeight(2);
+  strokeWeight(10);
   noFill();
   
   float xoff = noiseController;

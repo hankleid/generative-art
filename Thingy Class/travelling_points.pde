@@ -1,3 +1,11 @@
+void setup() {
+  size(1920, 1080);
+  background(color(250, 250, 255));
+  noStroke();
+  frameRate(12);
+  initialize();
+}
+
 int DENSITY = 10;
 int STROKE_COLOR = 255;
 byte COLOR_INC = 1;
@@ -5,29 +13,15 @@ float GENERAL_WEIGHT = 400;
 float SHRINK_RATE = 0.99;
 float MIN_WEIGHT = 10;
 color INIT_COLOR = color(200, 250, 255);
-ArrayList<MorphedThingy> THINGS = new ArrayList<MorphedThingy>();
+ArrayList<Thingy> THINGS = new ArrayList<Thingy>();
 
 float X_TOL = 5;
 float Y_TOL = 5;
 float NOISE_X = 2.8;
 float NOISE_Y = 0.5;
 
-void travelling_points_init() {
-  background(color(250, 250, 255));
-  noStroke();
-  frameRate(12);
-  
-  float xSpace = width / DENSITY;
-  float ySpace = height / DENSITY;
-  for (float x = 0; x <= width; x += xSpace) {
-    for (float y = 0; y <= height; y += ySpace) {
-      THINGS.add(new MorphedThingy(x, y, random(0, 500)));
-    }
-  } 
-}
-
-void travelling_points_draw() {
-  for (MorphedThingy thing : THINGS) {
+void draw() {
+  for (Thingy thing : THINGS) {
     thing.squat();
     
     float x = thing.getX();
@@ -46,12 +40,31 @@ void travelling_points_draw() {
   }
 }
 
+void initialize() {
+  float xSpace = width / DENSITY;
+  float ySpace = height / DENSITY;
+  for (float x = 0; x <= width; x += xSpace) {
+    for (float y = 0; y <= height; y += ySpace) {
+      println(DENSITY, x, xSpace, y, ySpace);
+      THINGS.add(new MorphedThingy(x, y, random(0, 500)));
+    }
+  } 
+}
+
+
 class MorphedThingy extends Thingy{
+  float x;
+  float y;
+  float weight;
+  color colr;
+  float id;
   
-  MorphedThingy(float x, float y, float i) {
-    super(x, y, i);
-    this.weight = map(this.id, 0, 500, GENERAL_WEIGHT/2, GENERAL_WEIGHT);
+  Thingy(float x, float y, float i) {
+    this.x = x;
+    this.y = y;
+    this.id = i;
     this.colr = INIT_COLOR;
+    this.weight = map(this.id, 0, 500, GENERAL_WEIGHT/2, GENERAL_WEIGHT);
   }
   
   void updateWeight() {
@@ -85,6 +98,26 @@ class MorphedThingy extends Thingy{
     g -= 1;
     b -= 1;
     this.colr = color(r, g, b);
+  }
+  
+  float getX() {
+    return this.x;
+  }
+  
+  float getY() {
+    return this.y;
+  }
+  
+  float getID() {
+    return this.id;
+  }
+  
+  void setX(float x) {
+    this.x = x;
+  }
+  
+  void setY(float y) {
+    this.y = y;
   }
   
   void squat() {
