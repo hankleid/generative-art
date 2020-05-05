@@ -1,4 +1,3 @@
-boolean hasStarted = false; // this is so that the Thing draws at least once before falling into the stop condition
 float THETA = 0;
 float ANGLE_INC = 0.005;
 float N_X = 0.2;
@@ -11,7 +10,7 @@ color[] COLORS = {color(255, 224, 138),        // golden
                   color(138, 173, 255)};       // blue
 float WEIGHT = 40;
 float R = -WEIGHT/2; // smallest radius; every subsequent circle will be farther from the center.
-byte NUM_CIRCLES = 25;
+byte NUM_CIRCLES = 30;
 ArrayList<CircleThingy> CIRCLES = new ArrayList<CircleThingy>();
 
 void concentric_init() {
@@ -20,12 +19,12 @@ void concentric_init() {
   
   float prevR = R;
   for (int i = 1; i <= NUM_CIRCLES; i++) {
-    float weight = random(WEIGHT - 15, WEIGHT + 15);
-    CIRCLES.add(new CircleThingy(random(PI, TWO_PI),
-                                 prevR + weight/2,
-                                 random(0, 500), 
-                                 weight, 
-                                 COLORS[int(random(0, COLORS.length - 1))]));
+    float weight = random(WEIGHT - 20, WEIGHT + 15);
+    CIRCLES.add(new CircleThingy(random(PI/8, TWO_PI), // starting angle
+                                 prevR + weight/2,     // radius
+                                 random(0, 500),       // id
+                                 weight,               // thiccness
+                                 COLORS[int(random(0, COLORS.length - 1))])); 
     prevR += weight;
   }
 }
@@ -33,31 +32,35 @@ void concentric_init() {
 void concentric_draw() {
   translate(width/2, height/2);
   for (CircleThingy thing : CIRCLES) {
-    if (thing.atInitPos() && hasStarted) {
-      continue; 
-    } else { // only draw if the thing has yet to return to its initial position.
+    if (thing.totalTraversed() <= TWO_PI) { // only draw if the Thing has yet to complete its circle.
       thing.squat();
-      thing.incrementAngle(map(noise(N_X, thing.getID(), N_Y), 0, 1, -ANGLE_INC, ANGLE_INC*3));
+      thing.incrementAngle(map(noise(N_X, N_Y, thing.getID()), 0, 1, ANGLE_INC/100, ANGLE_INC*2));
     }
     N_X += 0.001;
   }
-  hasStarted = true; // this really only needs to be set once but I'm too lazy to optimize this line.
   N_Y += 0.001;
 }
 
 class CircleThingy extends Thingy {
   float angle;
   float radius;
+  float totalTraversed; // # of radians the Thing has travelled so far;
   
   CircleThingy(float a, float r, float i, float w, color c) {
     super(cos(a) * r, sin(a) * r, i, w, c);
     this.angle = a;
     this.radius = r;
+    this.totalTraversed = 0;
   }
   
   void incrementAngle(float inc) {
     this.angle += inc;
+    this.totalTraversed += inc;
     this.x = cos(this.angle) * this.radius;
     this.y = sin(this.angle) * this.radius;
+  }
+  
+  float totalTraversed() {
+    return this.totalTraversed;
   }
 }
