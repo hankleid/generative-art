@@ -1,6 +1,8 @@
 class Thingy {
   float x;
   float y;
+  float x_init; // where the Thing is placed originally
+  float y_init; // where the Thing is placed originally
   float weight;
   color colr;
   float id;
@@ -23,6 +25,8 @@ class Thingy {
   Thingy(float x, float y) {
     this.x = x;
     this.y = y;
+    this.x_init = x;
+    this.y_init = y;
   }
   
   Thingy() {
@@ -41,6 +45,14 @@ class Thingy {
     return this.y;
   }
   
+  float getXInit() {
+    return this.x_init;
+  }
+  
+  float getYInit() {
+    return this.y_init;
+  }
+  
   float getID() {
     return this.id;
   }
@@ -56,5 +68,9 @@ class Thingy {
   void squat() {
     fill(this.colr);
     ellipse(this.x, this.y, this.weight, this.weight);
+  }
+  
+  boolean atInitPos() {
+    return this.getXInit() == this.getX() && this.getYInit() == this.getY();
   }
 }
