@@ -3,9 +3,9 @@ public void settings() {
 }
 
 void setup() {
-  concentric_init();
+  growth_init();
 }
 
 void draw() {
-  concentric_draw();
+  growth_draw();
 }

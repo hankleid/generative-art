@@ -23,6 +23,7 @@ class Thingy {
   }
   
   Thingy(float x, float y) {
+    this();
     this.x = x;
     this.y = y;
     this.x_init = x;
@@ -32,6 +33,8 @@ class Thingy {
   Thingy() {
     this.x = 0;
     this.y = 0;
+    this.x_init = x;
+    this.y_init = y;
     this.id = 5;
     this.colr = color(0, 0, 0);
     this.weight = 5;
